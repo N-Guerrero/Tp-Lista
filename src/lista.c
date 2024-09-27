@@ -7,7 +7,7 @@
 
 struct lista{
     size_t elementos_cant;
-    void* primer_nodo;
+    struct nodo* primer_nodo;
 
 };
 
@@ -15,6 +15,11 @@ typedef struct nodo{
     void* elemento;
     struct nodo* siguiente_nodo;
 }Nodo;
+struct lista_iterador
+{
+    Nodo* nodo_actual;
+    bool hay_siguiente;
+};
 
 Lista *lista_crear(){
     Lista* lista = malloc(sizeof(Lista));
@@ -26,7 +31,13 @@ Lista *lista_crear(){
 }
 
 void lista_destruir(Lista *lista){
-    lista->primer_nodo=NULL;
+    Nodo* siguiente=lista->primer_nodo;
+    Nodo* destruido=siguiente;
+    while(destruido!=NULL){
+        siguiente=siguiente->siguiente_nodo;
+        free(destruido);
+        destruido=siguiente;
+    }
     lista->elementos_cant=0;
     free(lista);
 }
@@ -86,7 +97,7 @@ bool lista_quitar_elemento(Lista *lista, size_t posicion,void **elemento_quitado
         anterior=anterior->siguiente_nodo;
     Nodo* quitado =anterior->siguiente_nodo;
     anterior->siguiente_nodo=quitado->siguiente_nodo;
-    elemento_quitado=(void*)&quitado;
+    elemento_quitado=quitado->elemento;
 
     return true;
 }
@@ -100,7 +111,75 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,void **elemento_encont
     }
     if(aux==NULL)return false;
 
-    elemento_encontrado=(void*)&aux;
+    elemento_encontrado=aux->elemento;
 
-        return true;
+    return true;
+}
+
+void *lista_buscar_elemento(Lista *lista, void *buscado,int (*comparador)(void *, void *)){
+    if(comparador==NULL)return NULL;
+    Nodo* aux=lista->primer_nodo;
+    while(aux!=NULL){
+        if(comparador(buscado,aux->elemento)==0)
+            return aux->elemento;
+        aux=aux->siguiente_nodo;
+    }
+    return NULL;
+}
+void lista_destruir_todo(Lista *lista, void (*destructor)(void *)){
+
+    Nodo* siguiente = lista->primer_nodo;
+    Nodo* destruido = siguiente;
+    while(destruido!=NULL){
+        siguiente=siguiente->siguiente_nodo;
+        destructor(destruido->elemento);
+        free(destruido);
+        destruido=siguiente;
+    }
+    if(lista->primer_nodo!=NULL)printf("error al destrir lista");
+    free(lista);
+}
+
+size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),void *ctx){
+    size_t iteraciones=0;
+    Nodo* aux=lista->primer_nodo;
+    while(aux!=NULL){
+        if(aux->elemento==NULL)continue;
+        bool funcion=f(aux->elemento,ctx);
+        if(funcion==false)break;
+        iteraciones++;
+    }
+    return iteraciones;
+}
+
+Lista_iterador *lista_iterador_crear(Lista *lista){
+    
+    Lista_iterador* iterador=malloc(sizeof(Lista_iterador));
+    if(iterador==NULL)return NULL;
+    iterador->nodo_actual=lista->primer_nodo;
+    if(iterador->nodo_actual->siguiente_nodo!=NULL)
+        iterador->hay_siguiente=true;
+
+    return iterador;
+}
+
+bool lista_iterador_hay_siguiente(Lista_iterador *iterador){
+    return iterador->hay_siguiente;
+}
+
+void lista_iterador_avanzar(Lista_iterador *iterador){
+
+    iterador->nodo_actual=iterador->nodo_actual->siguiente_nodo;
+    if(iterador->nodo_actual->siguiente_nodo!=NULL)
+        iterador->hay_siguiente=true;
+}
+
+void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador){
+    if(iterador->nodo_actual->elemento!=NULL)
+        return iterador->nodo_actual->elemento;
+    return NULL;
+}
+
+void lista_iterador_destruir(Lista_iterador *iterador){
+    free(iterador);
 }
