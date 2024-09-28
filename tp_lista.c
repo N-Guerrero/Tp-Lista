@@ -1,89 +1,144 @@
+#include "src/csv.h"
+#include "src/lista.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "src/lista.h"
 
 struct pokemon {
-	char *nombre;
-	char tipo;
-	int fuerza;
-	int destreza;
-	int resistencia;
+  char *nombre;
+  char tipo;
+  int fuerza;
+  int destreza;
+  int resistencia;
 };
-
-int comparar_nombre_pokemon(void *_p1, void *_p2)
-{
-	struct pokemon *p1 = _p1;
-	struct pokemon *p2 = _p2;
-
-	return strcmp(p1->nombre, p2->nombre);
+bool leer_int(const char *str, void *ctx) {
+  return sscanf(str, "%d", (int *)ctx) == 1;
 }
 
-int main(int argc, char *argv[])
-{
-	//recibir un archivo por linea de comandos
-	//abrir el archivo csv y parsear pokemones
-	//agregar los pokemones a una lista
-	//
-	//El usuario puede elegir una de dos opciones
-	//
-	//1. Ingrear por teclado un nombre y el programa busca el pokemon en la lista
-	//2. Listar todos los pokemones de la pokedex
-	//
-	//
-	struct pokemon p1;
-	struct pokemon p2;
-	//obvio que los inicializo
+bool leer_caracter(const char *str, void *ctx) {
+  *(char *)ctx = *(char *)str;
+  return true;
+}
+bool crear_string_nuevo(const char *str, void *ctx) {
+  char *nuevo = malloc(strlen(str) + 1);
+  if (nuevo == NULL)
+    return false;
+  strcpy(nuevo, str);
+  *(char **)ctx = nuevo;
+  return true;
+}
 
-	Lista *pokedex = lista_crear();
+int comparar_nombre_pokemon(void *_p1, void *_p2) {
+  struct pokemon *p1 = _p1;
+  struct pokemon *p2 = _p2;
 
-	//agregar_pokemon_desde_archivo(pokedex, "poke.csv");
+  return strcmp(p1->nombre, p2->nombre);
+}
+void liberar_pokemon(void *pokemon) {
+  struct pokemon *liberado = pokemon;
+  if (liberado != NULL) {
+    // free(liberado->nombre);
+    free(liberado);
+    liberado = NULL;
+  }
+}
+agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo *archivo) {
+  bool (*funciones[5])(const char *, void *) = {
+      crear_string_nuevo, leer_caracter, leer_int, leer_int, leer_int};
 
-	lista_agregar_al_final(pokedex, &p1);
-	lista_agregar_al_final(pokedex, &p2);
+  int fuerza;
+  int resistencia;
+  int destreza;
+  char tipo;
+  char *nombre = NULL;
+  void *punteros[5] = {&nombre, &tipo, &fuerza, &destreza, &resistencia};
 
-	struct pokemon buscado = { .nombre = "Pikachu" };
-	struct pokemon *encontrado = lista_buscar_elemento(
-		pokedex, &buscado, comparar_nombre_pokemon);
+  while (leer_linea_csv(archivo, 5, funciones, punteros) == 5) {
+    struct pokemon nuevo_pokemon = {.nombre = nombre,
+                                    .tipo = tipo,
+                                    .fuerza = fuerza,
+                                    .destreza = destreza,
+                                    .resistencia = resistencia};
+    lista_agregar_al_final(pokedex, &nuevo_pokemon);
 
-	//struct pokemon *quitado;
-	//lista_quitar_elemento(pokedex, 1 , (void**)&quitado);
+    free(nombre);
+  }
+  cerrar_archivo_csv(archivo);
+}
+void mostrar_pokemon(struct pokemon *pokemon) {
 
-	struct pokemon *en_posicion;
-	lista_obtener_elemento(pokedex, 1, (void **)&en_posicion);
+  printf("Nombre: %s\nTipo: %c\nFuerza:%d\nDestreza:%d\nResistencia:%d\n",
+         pokemon->nombre, pokemon->tipo, pokemon->fuerza, pokemon->destreza,
+         pokemon->resistencia);
+}
 
-	//Recorrer lista
-	//Posibilidad 1
-	//1+2+3+4+5+6.....+n-1+n
-	//puede ser O(n), O(n²) para enlazada
-	for (size_t i = 0; //O(1)
-	     i < lista_cantidad_elementos(pokedex); //O(1)
-	     i++) { //O(1)
-		struct pokemon *p;
-		lista_obtener_elemento(pokedex, i, (void **)&p); //O(n)
-		///hacer algo
-	}
+int main(int argc, char *argv[]) {
+  // recibir un archivo por linea de comandos
+  // abrir el archivo csv y parsear pokemones
+  // agregar los pokemones a una lista
+  //
+  // El usuario puede elegir una de dos opciones
+  //
+  // 1. Ingrear por teclado un nombre y el programa busca el pokemon en la lista
+  // 2. Listar todos los pokemones de la pokedex
+  //
+  //
+  struct archivo *archivo = abrir_archivo_csv(argv[1], argv[2]);
+  Lista *pokedex = lista_crear();
+  if (archivo == NULL) {
+    struct pokemon p1 = {.destreza = 100,
+                         .fuerza = 5,
+                         .resistencia = 3,
+                         .tipo = 'E',
+                         .nombre = "luxray"};
+    struct pokemon p2 = {.destreza = 22,
+                         .fuerza = 84,
+                         .resistencia = 80,
+                         .tipo = 'A',
+                         .nombre = "Blastoise"};
+    lista_agregar_al_final(pokedex, &p1);
+    lista_agregar_al_final(pokedex, &p2);
+  }
+  if (archivo != NULL)
+    agregar_pokemon_desde_archivo(pokedex, archivo);
 
-	//Recorrer lista
-	//Posibilidad 2
-	void *ctx = NULL;
-	//O(n)
-	lista_iterar_elementos(pokedex, hacer_algo, ctx);
+  // menu
 
-	//Recorrer lista
-	//Posibilidad 3
-	//TDA iterador externo
-	Lista_iterador *i;
-	for (i = lista_iterador_crear(pokedex); //O(1)
-	     lista_iterador_hay_siguiente(i); //O(1)
-	     lista_iterador_avanzar(i)) { //O(1)
-		struct pokemon *p;
-		p = lista_iterador_obtener_elemento_actual(i); //O(1)
-		///hacer algo
-	}
-	lista_iterador_destruir(i);
+  int opcion = -1;
+  do {
+    printf("Pokedex iniciada.\nQue desea hacer?\n");
+    printf("1.Buscar pokemon en la pokedex\n2.Listar pokemones capturados\n");
+    printf("0.salir\n");
+    if (scanf("%d", &opcion) != 1)
+      printf("opcion invalida\n");
+    if (opcion == 1) {
+      printf("que pokemon desea buscar?\n");
+      char pokemon_buscado[100];
+      scanf("%99s", pokemon_buscado);
+      struct pokemon buscado = {.nombre = pokemon_buscado};
+      struct pokemon *encontrado =
+          lista_buscar_elemento(pokedex, &buscado, comparar_nombre_pokemon);
+      if (encontrado != NULL) {
+        printf("Se encontro al pokemon buscado!!\n");
+        mostrar_pokemon(encontrado);
+      } else
+        printf("pokemon no encontrado\n");
 
-	//lista_iterar_elementos(pokedex, liberar_pokemon, NULL);
-	//lista_destruir(pokedex);
-	lista_destruir_todo(pokedex, liberar_pokemon);
-	return 0;
+      opcion = 0;
+    }
+    if (opcion == 2) {
+      for (size_t i = 1;                           // O(1)
+           i <= lista_cantidad_elementos(pokedex); // O(1)
+           i++) {                                  // O(1)
+        struct pokemon *p;
+        lista_obtener_elemento(pokedex, i, (void **)&p); // O(n)
+        mostrar_pokemon(p);
+        printf("-----------------------\n");
+      }
+      opcion = 0;
+    }
+  } while (opcion != 0);
+
+  lista_destruir_todo(pokedex, liberar_pokemon);
+  return 0;
 }
