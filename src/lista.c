@@ -40,6 +40,8 @@ void lista_destruir(Lista *lista){
     }
     lista->elementos_cant=0;
     free(lista);
+    lista=NULL;
+    printf("%p\n",(void*)lista);
 }
 
 size_t lista_cantidad_elementos(Lista *lista){
@@ -61,7 +63,7 @@ bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa){
         return true;
     }
 
-    for(size_t i=1;i<posicion;i++)
+    for(size_t i=1;i<posicion-1;i++)
         aux1=aux1->siguiente_nodo;
 
     Nodo* Nuevo=malloc(sizeof(Nodo));
@@ -74,14 +76,20 @@ bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa){
 
 bool lista_agregar_al_final(Lista *lista, void *cosa){
     Nodo* aux1=(Nodo*)lista->primer_nodo;
-    while(aux1->siguiente_nodo!=NULL){
-        aux1=aux1->siguiente_nodo;
-    }
     Nodo* nuevo =malloc(sizeof(Nodo));
     if(nuevo==NULL)return false;
     nuevo->elemento=cosa;
     nuevo->siguiente_nodo=NULL;
+    if(aux1==NULL){//primer caso, si no hay nodo al inicio
+        lista->primer_nodo=nuevo;
+        lista->elementos_cant++;
+        return true;
+    }
+    while(aux1->siguiente_nodo!=NULL){
+        aux1=aux1->siguiente_nodo;
+    }
     aux1->siguiente_nodo=nuevo;
+    lista->elementos_cant++;
     return true;
 }
 
@@ -93,11 +101,11 @@ bool lista_quitar_elemento(Lista *lista, size_t posicion,void **elemento_quitado
         elemento_quitado=(void*)&anterior;
         return true;
     }
-    for(size_t i=1;i<posicion;i++)
+    for(size_t i=1;i<posicion-1;i++)
         anterior=anterior->siguiente_nodo;
     Nodo* quitado =anterior->siguiente_nodo;
     anterior->siguiente_nodo=quitado->siguiente_nodo;
-    elemento_quitado=quitado->elemento;
+    *elemento_quitado=quitado->elemento;
 
     return true;
 }
@@ -106,13 +114,13 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,void **elemento_encont
 
     if(posicion>lista->elementos_cant)return false;
     Nodo* aux=(Nodo*)lista->primer_nodo;
-    for(size_t i=0;i<posicion;i++){
+    for(size_t i=1;i<posicion;i++){
         aux=aux->siguiente_nodo;
     }
     if(aux==NULL)return false;
 
-    elemento_encontrado=aux->elemento;
-
+    *elemento_encontrado=aux->elemento;
+    printf("elemento encontrado %p\n",*elemento_encontrado);
     return true;
 }
 
@@ -138,16 +146,19 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *)){
     }
     if(lista->primer_nodo!=NULL)printf("error al destrir lista");
     free(lista);
+    lista=NULL;
+    
 }
 
 size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),void *ctx){
     size_t iteraciones=0;
     Nodo* aux=lista->primer_nodo;
     while(aux!=NULL){
-        if(aux->elemento==NULL)continue;
+        // if(aux->elemento==NULL)continue;
         bool funcion=f(aux->elemento,ctx);
         if(funcion==false)break;
         iteraciones++;
+        aux=aux->siguiente_nodo;
     }
     return iteraciones;
 }
@@ -182,4 +193,5 @@ void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador){
 
 void lista_iterador_destruir(Lista_iterador *iterador){
     free(iterador);
+    iterador=NULL;
 }
