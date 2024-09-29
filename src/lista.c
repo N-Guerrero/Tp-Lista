@@ -132,15 +132,16 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
     return false;
 
   *elemento_encontrado = aux->elemento;
-  
+
   return true;
 }
 
 void *lista_buscar_elemento(Lista *lista, void *buscado,
                             int (*comparador)(void *, void *)) {
-  if (comparador == NULL){
+  if (comparador == NULL) {
     printf("es null la funcion\n");
-    return NULL;}
+    return NULL;
+  }
   Nodo *aux = lista->primer_nodo;
   while (aux != NULL) {
     if (comparador(buscado, aux->elemento) == 0)
@@ -160,7 +161,7 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *)) {
     free(destruido);
     destruido = siguiente;
   }
-  
+
   free(lista);
   lista = NULL;
 }
