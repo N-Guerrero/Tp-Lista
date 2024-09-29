@@ -29,6 +29,8 @@ Lista *lista_crear()
 
 void lista_destruir(Lista *lista)
 {
+	if (lista == NULL)
+		return;
 	Nodo *siguiente = lista->primer_nodo;
 	Nodo *destruido = siguiente;
 	while (destruido != NULL) {
@@ -178,6 +180,8 @@ void *lista_buscar_elemento(Lista *lista, void *buscado,
 }
 void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
 {
+	if (lista == NULL)
+		return;
 	Nodo *siguiente = lista->primer_nodo;
 	Nodo *destruido = siguiente;
 	while (destruido != NULL) {

@@ -64,6 +64,8 @@ Finalmente, tanto `PILA` como `COLA` son como wrapers de una lista que limitan c
 
 ### Qué es una lista/pila/cola? Explicar con diagramas.
 Una lista es una cadena de elementos que pueden ser accedidos en cualquier orden, podes agarrar el primero, el ultimo o cualquiera del medio. 
+<img  src="img/imageLista.png">
+
 ### Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
     Insertar/obtener/eliminar al inicio
     Insertar/obtener/eliminar al final
