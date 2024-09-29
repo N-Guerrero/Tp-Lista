@@ -94,7 +94,9 @@ int main(int argc, char *argv[])
 	//
 	//
 
-	struct archivo_csv *archivo = abrir_archivo_csv(argv[1], argv[2][0]);
+	//el bot ejecuta Command: ./lista ejemplos/pokedex.csv
+	// le falta el separador asi que lo voy a poner fijo
+	struct archivo_csv *archivo = abrir_archivo_csv(argv[1], ';');
 
 	Lista *pokedex = lista_crear();
 
