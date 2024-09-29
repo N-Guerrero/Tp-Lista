@@ -33,6 +33,8 @@ void cola_destruir_todo(Cola *cola, void (*f)(void *))
 }
 size_t cola_cantidad(Cola *cola)
 {
+	if (cola == NULL)
+		return 0;
 	return lista_cantidad_elementos(cola->lista);
 }
 void *cola_frente(Cola *cola)

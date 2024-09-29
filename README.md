@@ -4,61 +4,68 @@
 
 # TDA LISTA
 
-# ESTO ES UN TEMPLATE, COMPLETAR LO QUE HAGA FALTA, ELIMINAR LO QUE SOBRE (INCLUIDA ESTA LÍNEA)
 
-## Alumno: (Nombre Apellido) - (Padrón) - (Mail)
+
+## Alumno: Nicolas Martin Guerrero- 112514 - nguerrero@fi.uba.ar // guerreronico81@gmail.com
 
 - Para compilar:
 
 ```bash
-línea de compilación
+gcc tp_lista.c src/*.c
 ```
 
 - Para ejecutar:
 
 ```bash
-línea de ejecución
+./a.out pokedex.csv ';'
 ```
 
 - Para ejecutar con valgrind:
 ```bash
-línea con valgrind
+valgrind ./a.out pokedex.csv ';'
 ```
 
 ---
 
 ##  Funcionamiento
 
-Explicación de cómo funcionan las estructuras desarrolladas en el TP y el funcionamiento general del mismo.
+El TDA principal de este trabajo es el TDA Lista, que es una lista simplemente enlazada que empieza con un `struct lista` que tiene la cantidad de elementos guardados y un puntero a un `NODO`. Ese nodo es el que almacena un elemento y un puntero al siguiente `NODO`.
+Tanto el `struct lista` como cada `NODO` se inicializan con `malloc`.
+<img  src="img/imageLista.png">
 
-Aclarar en esta parte todas las decisiones que se tomaron al realizar el TP, cosas que no se aclaren en el enunciado, fragmentos de código que necesiten explicación extra, etc.
+Para el funcionamiento de las funciones de esta lista, necesito poder moverme dentro de la lista, nodo a nodo. Para lograr esto mismo, utilizo un puntero auxiliar que va cambiando de objetivo hasta llegar al punto deseado.
+Por ejemplo, en `lista_agregar_al_final` muevo aux el nodo que en ptr_siguiente tiene `NULL`, ya que ese es el ultimo nodo.
 
-Incluír **EN TODOS LOS TPS** los diagramas relevantes al problema (mayormente diagramas de memoria para explicar las estructuras, pero se pueden utilizar otros diagramas si es necesario).
+En `lista_quitar_elemento` se sigue una idea similar, pero con la diferencia que ahora la indicacion de parar esta dada por la posicion que recive la funcion, entonces aux debe parar en el nodo de la posicion y otro puntero auxiliar (anterior) debe parar un nodo antes. Con los punteros bien posicionados, se puede quitar un nodo y enlazar al anterior.
+<img  src="img/imageQuitar.png">
 
-### Por ejemplo:
+Con esta logica de usar uno o varios punteros para modificar la lista, puedo hacer el resto de funciones, como borrar los nodos uno a uno o iterar todos los nodos.
 
-El programa funciona abriendo el archivo pasado como parámetro y leyendolo línea por línea. Por cada línea crea un registro e intenta agregarlo al vector. La función de lectura intenta leer todo el archivo o hasta encontrar el primer error. Devuelve un vector con todos los registros creados.
+Finalmente, tanto `PILA` como `COLA` son como wrapers de una lista que limitan como se agrega y saca nodos del TDA.
 
-<div align="center">
-<img width="70%" src="img/diagrama1.svg">
-</div>
-
-En el archivo `sarasa.c` la función `funcion1` utiliza `realloc` para agrandar la zona de memoria utilizada para conquistar el mundo. El resultado de `realloc` lo guardo en una variable auxiliar para no perder el puntero original en caso de error:
-
-```c
-int *vector = realloc(vector_original, (n+1)*sizeof(int));
-
-if(vector == NULL)
-    return -1;
-vector_original = vector;
-```
-
+`Pila`  hace todo desde el tope, que decidi poner al inicio para siempre tener acceso facil.
 
 <div align="center">
-<img width="70%" src="img/diagrama2.svg">
+<img width="70%" src="img/imagePila.png">
 </div>
+
+`Cola`  agrega en el final y saca desde el frente, decidi poner el frente al inicio para siempre tener acceso facil, y agregar al final ya es una funcion de Lista
+
+<div align="center">
+<img width="70%" src="img/imageCola.png">
+</div>
+
+
+
 
 ---
 
 ## Respuestas a las preguntas teóricas
-Incluír acá las respuestas a las preguntas del enunciado (si aplica).
+
+### Qué es una lista/pila/cola? Explicar con diagramas.
+Una lista es una cadena de elementos que pueden ser accedidos en cualquier orden, podes agarrar el primero, el ultimo o cualquiera del medio. 
+### Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
+    Insertar/obtener/eliminar al inicio
+    Insertar/obtener/eliminar al final
+    Insertar/obtener/eliminar al medio
+### Explica la complejidad de las operaciones implementadas en tu trabajo para la pila y la cola.
