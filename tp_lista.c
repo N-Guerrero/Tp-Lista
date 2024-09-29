@@ -67,20 +67,16 @@ void agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo_csv *archivo)
 		nuevo_pokemon->destreza = destreza;
 		nuevo_pokemon->tipo = tipo;
 		nuevo_pokemon->resistencia = resistencia;
-		
-		
-		lista_agregar_al_final(pokedex, nuevo_pokemon);
 
-		
+		lista_agregar_al_final(pokedex, nuevo_pokemon);
 	}
 	cerrar_archivo_csv(archivo);
 }
 void mostrar_pokemon(struct pokemon *pokemon)
 {
-	printf("nombre %s \n",pokemon->nombre);
-	// printf("Nombre: %s\nTipo: %c\nFuerza:%d\nDestreza:%d\nResistencia:%d\n",
-	//        pokemon->nombre, pokemon->tipo, pokemon->fuerza,
-	//        pokemon->destreza, pokemon->resistencia);
+	printf("Nombre: %s\nTipo: %c\nFuerza:%d\nDestreza:%d\nResistencia:%d\n",
+	       pokemon->nombre, pokemon->tipo, pokemon->fuerza,
+	       pokemon->destreza, pokemon->resistencia);
 }
 
 int main(int argc, char *argv[])
@@ -144,7 +140,6 @@ int main(int argc, char *argv[])
 				if (lista_obtener_elemento(
 					    pokedex, i, (void **)&p)) { // O(n)
 					mostrar_pokemon(p);
-					
 
 					printf("-----------------------\n");
 				}
