@@ -188,7 +188,7 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
 	Nodo *destruido = siguiente;
 	while (destruido != NULL) {
 		siguiente = siguiente->siguiente_nodo;
-		if (destruido->elemento != NULL)
+		if (destruido->elemento != NULL && destructor != NULL)
 			destructor(destruido->elemento);
 		free(destruido);
 		destruido = siguiente;
@@ -202,6 +202,8 @@ size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
 			      void *ctx)
 {
 	if (lista == NULL)
+		return 0;
+	if (f == NULL)
 		return 0;
 	size_t iteraciones = 0;
 	Nodo *aux = lista->primer_nodo;

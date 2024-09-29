@@ -84,5 +84,10 @@ pero esto no aplica al vector dinamico.
 
 Ya que el Vector dinamico tiene que usar `realloc` para eliminar e insertar, llevando la complejidad a O(n) y si el vector dinamico tiene un puntero al final puede obtener con O(1).
 
+Las listas enlazadas pueden ser O(1) si ya tienen un puntero que apunta al final, sino son O(n) los 2 tipos de lista.
+
+Insertar/obtener/eliminar al medio es O(n) siempre para vector dinamico, porque tiene que usar realloc si no es obtener, y aun si es obtener es O(n) porque tiene que recorrer la lista en el peor caso.
+
+Para las listas enlazadas la complejidad sigue siendo O(n) porque tienen que moverse por la lista, ya sea para Insertar/obtener/eliminar.
 
 ### Explica la complejidad de las operaciones implementadas en tu trabajo para la pila y la cola.
