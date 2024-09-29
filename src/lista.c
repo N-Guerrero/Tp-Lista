@@ -44,6 +44,8 @@ void lista_destruir(Lista *lista)
 
 size_t lista_cantidad_elementos(Lista *lista)
 {
+	if (lista == NULL)
+		return 0;
 	if (lista->primer_nodo == NULL)
 		return 0;
 	else
@@ -130,13 +132,17 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 {
 	if (posicion > lista->elementos_cant)
 		return false;
+	if (elemento_encontrado == NULL)
+		return true;
 	if (posicion == 0) {
 		*elemento_encontrado = lista->primer_nodo->elemento;
 		return true;
 	}
+	if (lista->primer_nodo == NULL)
+		return false;
 
 	Nodo *aux = (Nodo *)lista->primer_nodo;
-	for (size_t i = 0; i < posicion - 1; i++) {
+	for (size_t i = 0; i < posicion; i++) {
 		aux = aux->siguiente_nodo;
 	}
 
@@ -149,7 +155,6 @@ void *lista_buscar_elemento(Lista *lista, void *buscado,
 			    int (*comparador)(void *, void *))
 {
 	if (comparador == NULL) {
-		printf("es null la funcion\n");
 		return NULL;
 	}
 	Nodo *aux = lista->primer_nodo;
@@ -158,7 +163,7 @@ void *lista_buscar_elemento(Lista *lista, void *buscado,
 			return aux->elemento;
 		aux = aux->siguiente_nodo;
 	}
-	printf("es null busq\n");
+
 	return NULL;
 }
 void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
@@ -215,6 +220,8 @@ void lista_iterador_avanzar(Lista_iterador *iterador)
 	iterador->nodo_actual = iterador->nodo_actual->siguiente_nodo;
 	if (iterador->nodo_actual->siguiente_nodo != NULL)
 		iterador->hay_siguiente = true;
+	else
+		iterador->hay_siguiente = false;
 }
 
 void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador)
