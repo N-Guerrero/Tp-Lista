@@ -94,8 +94,6 @@ int main(int argc, char *argv[])
 	//
 	//
 
-	char *nombre_file = "pokedex.csv";
-	char separador = ';';
 	struct archivo_csv *archivo = abrir_archivo_csv(argv[1], argv[2][0]);
 
 	Lista *pokedex = lista_crear();
@@ -116,7 +114,9 @@ int main(int argc, char *argv[])
 		if (opcion == 1) {
 			printf("que pokemon desea buscar?\n");
 			char pokemon_buscado[100];
-			scanf("%99s", pokemon_buscado);
+			int correcto = scanf("%99s", pokemon_buscado);
+			if (correcto == 0)
+				continue;
 			struct pokemon buscado = { .nombre = pokemon_buscado };
 
 			struct pokemon *encontrado = lista_buscar_elemento(
