@@ -130,7 +130,9 @@ bool lista_quitar_elemento(Lista *lista, size_t posicion,
 bool lista_obtener_elemento(Lista *lista, size_t posicion,
 			    void **elemento_encontrado)
 {
-	if (posicion > lista->elementos_cant)
+	if (lista == NULL)
+		return false;
+	if (posicion >= lista->elementos_cant)
 		return false;
 	if (elemento_encontrado == NULL)
 		return true;
@@ -145,7 +147,8 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 	for (size_t i = 0; i < posicion; i++) {
 		aux = aux->siguiente_nodo;
 	}
-
+	if (aux == NULL)
+		return false;
 	*elemento_encontrado = aux->elemento;
 
 	return true;
@@ -190,8 +193,10 @@ size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
 		if (aux->elemento == NULL)
 			continue;
 		bool funcion = f(aux->elemento, ctx);
-		if (funcion == false)
+		if (funcion == false) {
+			iteraciones++;
 			break;
+		}
 		iteraciones++;
 		aux = aux->siguiente_nodo;
 	}
@@ -206,6 +211,8 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 	iterador->nodo_actual = lista->primer_nodo;
 	if (iterador->nodo_actual->siguiente_nodo != NULL)
 		iterador->hay_siguiente = true;
+	else
+		iterador->hay_siguiente = false;
 
 	return iterador;
 }
@@ -217,7 +224,8 @@ bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
 
 void lista_iterador_avanzar(Lista_iterador *iterador)
 {
-	iterador->nodo_actual = iterador->nodo_actual->siguiente_nodo;
+	if (iterador->nodo_actual != NULL)
+		iterador->nodo_actual = iterador->nodo_actual->siguiente_nodo;
 	if (iterador->nodo_actual->siguiente_nodo != NULL)
 		iterador->hay_siguiente = true;
 	else
