@@ -53,9 +53,9 @@ void probar_iterar(Lista *lista)
 void probar_obtener(Lista *lista)
 {
 	struct pokemon *p;
-	lista_obtener_elemento(lista, 0, (void **)&p);
+	lista_obtener_elemento(lista, 2, (void **)&p);
 	printf("elemento encontrado %p\n", (void *)p);
-	printf("nombre del pokemon 0 = %s\n", (p)->nombre);
+	printf("nombre del pokemon 2 = %s\n", (p)->nombre);
 	pa2m_afirmar(strcmp(p->nombre, "pichu") == 0, "pichu encontrado");
 }
 void probar_agregar_en_pos(Lista *lista, void *cosa)
@@ -117,13 +117,13 @@ int main()
 	probar_agregar_alfinal(lista, &pokemon2);
 	probar_agregar_alfinal(lista, &pokemon3);
 
-	probar_iterar(lista);
+	//probar_iterar(lista);
 
 	probar_agregar_en_pos(lista, &pokemon4);
 	// printf("--------\n");
 	probar_iterar(lista);
-	probar_obtener(lista);
-	probar_eliminar(lista);
+	//probar_obtener(lista);
+	//probar_eliminar(lista);
 	// probar_obtener(lista);
 	// for (size_t i = 1; // O(1)
 	//      i <= lista_cantidad_elementos(lista); // O(1)
@@ -133,6 +133,17 @@ int main()
 	// 	printf("%s\n", p->nombre);
 	// }
 	// probar_buscar(lista);
+
+	// Lista_iterador *i;
+	// for (i = lista_iterador_crear(lista); //O(1)
+	//      lista_iterador_hay_siguiente(i); //O(1)
+	//      lista_iterador_avanzar(i)) { //O(1)
+	// 	struct pokemon *p;
+	// 	p = lista_iterador_obtener_elemento_actual(i); //O(1)
+	//   printf("%s , %p\n",p->nombre,(void*)p);
+	// 	///hacer algo
+	// }
+	// lista_iterador_destruir(i);
 
 	probar_destruir_lista(lista);
 
