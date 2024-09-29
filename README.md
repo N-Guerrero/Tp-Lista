@@ -72,8 +72,17 @@ Una cola sigue siendo una cadena de elementos pero solo se puede agregar en un e
 Una Pila tambien puede entenderse como una cadena de elementos, pero la Pila solo permite el acceso al elemento que esta en el tope, entonces solo se puede agregar arriba del tope(azul) o sacar el elemento que esta en el tope(rojo).
 Lo que esta tapado por amarillo es inaccesible.
 <img  src="img/PilaExpli.png">
+
 ### Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
     Insertar/obtener/eliminar al inicio
     Insertar/obtener/eliminar al final
     Insertar/obtener/eliminar al medio
+Las 3 implementaciones de lista tienen la misma complejidad para Insertar/obtener/eliminar al inicio. Es O(1) ya que las tres implementaciones tienen facil acceso al primer nodo, y si tienen que crearlo es un simple malloc que no mueve nada. O si tienen que eliminarlo al acceder al primer nodo tienen el puntero que apunta al siguiente.
+
+Insertar/obtener/eliminar al final Es siempre O(n), como minimio,en todas las implementaciones, a menos de que ya tengan guardado un puntero al final
+pero esto no aplica al vector dinamico. 
+
+Ya que el Vector dinamico tiene que usar `realloc` para eliminar e insertar, llevando la complejidad a O(n) y si el vector dinamico tiene un puntero al final puede obtener con O(1).
+
+
 ### Explica la complejidad de las operaciones implementadas en tu trabajo para la pila y la cola.
