@@ -53,6 +53,8 @@ size_t lista_cantidad_elementos(Lista *lista)
 }
 bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa)
 {
+	if (lista == NULL)
+		return false;
 	if (posicion > lista->elementos_cant)
 		return false;
 
@@ -84,6 +86,8 @@ bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa)
 
 bool lista_agregar_al_final(Lista *lista, void *cosa)
 {
+	if (lista == NULL)
+		return false;
 	Nodo *aux1 = lista->primer_nodo;
 	Nodo *nuevo = malloc(sizeof(Nodo));
 	if (nuevo == NULL)
@@ -106,6 +110,8 @@ bool lista_agregar_al_final(Lista *lista, void *cosa)
 bool lista_quitar_elemento(Lista *lista, size_t posicion,
 			   void **elemento_quitado)
 {
+	if (lista == NULL)
+		return false;
 	if (lista->primer_nodo == NULL)
 		return false;
 	Nodo *anterior = lista->primer_nodo;
@@ -157,6 +163,8 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 void *lista_buscar_elemento(Lista *lista, void *buscado,
 			    int (*comparador)(void *, void *))
 {
+	if (lista == NULL)
+		return false;
 	if (comparador == NULL) {
 		return NULL;
 	}
@@ -187,6 +195,8 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
 size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
 			      void *ctx)
 {
+	if (lista == NULL)
+		return 0;
 	size_t iteraciones = 0;
 	Nodo *aux = lista->primer_nodo;
 	while (aux != NULL) {
@@ -205,6 +215,8 @@ size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
 
 Lista_iterador *lista_iterador_crear(Lista *lista)
 {
+	if (lista == NULL)
+		return NULL;
 	Lista_iterador *iterador = malloc(sizeof(Lista_iterador));
 	if (iterador == NULL)
 		return NULL;
@@ -219,17 +231,16 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 
 bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
 {
-	return iterador->hay_siguiente;
+	if (iterador->nodo_actual->siguiente_nodo != NULL)
+		return true;
+	else
+		return false;
 }
 
 void lista_iterador_avanzar(Lista_iterador *iterador)
 {
 	if (iterador->nodo_actual != NULL)
 		iterador->nodo_actual = iterador->nodo_actual->siguiente_nodo;
-	if (iterador->nodo_actual->siguiente_nodo != NULL)
-		iterador->hay_siguiente = true;
-	else
-		iterador->hay_siguiente = false;
 }
 
 void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador)
