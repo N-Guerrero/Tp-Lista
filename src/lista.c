@@ -131,7 +131,7 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 	if (posicion > lista->elementos_cant)
 		return false;
 	if (posicion == 0) {
-		*elemento_encontrado = lista->primer_nodo;
+		*elemento_encontrado = lista->primer_nodo->elemento;
 		return true;
 	}
 
