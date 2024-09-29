@@ -41,7 +41,7 @@ void liberar_pokemon(void *pokemon)
 {
 	struct pokemon *liberado = pokemon;
 	if (liberado != NULL) {
-		// free(liberado->nombre);
+		free(liberado->nombre);
 		free(liberado);
 		liberado = NULL;
 	}
@@ -67,18 +67,20 @@ void agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo_csv *archivo)
 		nuevo_pokemon->destreza = destreza;
 		nuevo_pokemon->tipo = tipo;
 		nuevo_pokemon->resistencia = resistencia;
-
+		
+		
 		lista_agregar_al_final(pokedex, nuevo_pokemon);
 
-		free(nombre);
+		
 	}
 	cerrar_archivo_csv(archivo);
 }
 void mostrar_pokemon(struct pokemon *pokemon)
 {
-	printf("Nombre: %s\nTipo: %c\nFuerza:%d\nDestreza:%d\nResistencia:%d\n",
-	       pokemon->nombre, pokemon->tipo, pokemon->fuerza,
-	       pokemon->destreza, pokemon->resistencia);
+	printf("nombre %s \n",pokemon->nombre);
+	// printf("Nombre: %s\nTipo: %c\nFuerza:%d\nDestreza:%d\nResistencia:%d\n",
+	//        pokemon->nombre, pokemon->tipo, pokemon->fuerza,
+	//        pokemon->destreza, pokemon->resistencia);
 }
 
 int main(int argc, char *argv[])
@@ -134,14 +136,15 @@ int main(int argc, char *argv[])
 			opcion = 0;
 		}
 		if (opcion == 2) {
-			for (size_t i = 1; // O(1)
-			     i <= lista_cantidad_elementos(pokedex); // O(1)
+			for (size_t i = 0; // O(1)
+			     i < lista_cantidad_elementos(pokedex); // O(1)
 			     i++) { // O(1)
 				struct pokemon *p = NULL;
 
 				if (lista_obtener_elemento(
 					    pokedex, i, (void **)&p)) { // O(n)
 					mostrar_pokemon(p);
+					
 
 					printf("-----------------------\n");
 				}
