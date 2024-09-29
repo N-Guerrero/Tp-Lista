@@ -34,23 +34,23 @@ Tanto el `struct lista` como cada `NODO` se inicializan con `malloc`.
 <img  src="img/imageLista.png">
 
 Para el funcionamiento de las funciones de esta lista, necesito poder moverme dentro de la lista, nodo a nodo. Para lograr esto mismo, utilizo un puntero auxiliar que va cambiando de objetivo hasta llegar al punto deseado.
-Por ejemplo, en `lista_agregar_al_final` muevo aux el nodo que en ptr_siguiente tiene `NULL`, ya que ese es el ultimo nodo.
+Por ejemplo, en `lista_agregar_al_final` muevo `aux` al nodo que en `ptr_siguiente` tiene `NULL`, ya que ese es el último nodo.
 
-En `lista_quitar_elemento` se sigue una idea similar, pero con la diferencia que ahora la indicacion de parar esta dada por la posicion que recive la funcion, entonces aux debe parar en el nodo de la posicion y otro puntero auxiliar (anterior) debe parar un nodo antes. Con los punteros bien posicionados, se puede quitar un nodo y enlazar al anterior.
+En `lista_quitar_elemento` se sigue una idea similar, pero con la diferencia de que ahora la indicación de parar está dada por la posición que recibe la función. Entonces, aux debe parar en el nodo de la posición y otro puntero auxiliar (anterior) debe detenerse un nodo antes. Con los punteros bien posicionados, se puede quitar un nodo y enlazar al anterior.
 <img  src="img/imageQuitar.png">
 
-Con esta logica de usar uno o varios punteros para modificar la lista, puedo hacer el resto de funciones, como borrar los nodos uno a uno o iterar todos los nodos.
+Con esta lógica de usar uno o varios punteros para modificar la lista, puedo hacer el resto de funciones, como borrar los nodos uno a uno o iterar sobre todos los nodos.
 
-Finalmente, tanto `PILA` como `COLA` son como wrapers de una lista que limitan como se agrega y saca nodos del TDA.
+Finalmente, tanto `PILA` como `COLA` son como wrappers de una lista que limitan cómo se agregan y sacan nodos del TDA.
 
-`Pila`  hace todo desde el tope, que decidi poner al inicio para siempre tener acceso facil.
+`Pila` hace todo desde el tope, que decidí poner al inicio para siempre tener acceso fácil.
 
 <div align="center">
 <img width="70%" src="img/imagePila.png">
 </div>
 
-`Cola`  agrega en el final y saca desde el frente, decidi poner el frente al inicio para siempre tener acceso facil, y agregar al final ya es una funcion de Lista
-
+`Cola` agrega al final y saca desde el frente. 
+Decidí poner el frente al inicio para siempre tener acceso fácil, y agregar al final ya es una función de Lista.
 <div align="center">
 <img width="70%" src="img/imageCola.png">
 </div>
@@ -63,14 +63,14 @@ Finalmente, tanto `PILA` como `COLA` son como wrapers de una lista que limitan c
 ## Respuestas a las preguntas teóricas
 
 ### Qué es una lista/pila/cola? Explicar con diagramas.
-Una lista es una cadena de elementos que pueden ser accedidos en cualquier orden, podes agarrar el primero, el ultimo o cualquiera del medio. 
+Una lista es una cadena de elementos que pueden ser accedidos en cualquier orden. Podés agarrar el primero, el último o cualquiera del medio. 
 <img  src="img/imageLista.png">
 
-Una cola sigue siendo una cadena de elementos pero solo se puede agregar en un extremo(Final) y solo se puede eliminar desde el otro extremo(Frente).
+Una cola sigue siendo una cadena de elementos, pero solo se puede agregar en un extremo (Final) y solo se puede eliminar desde el otro extremo (Frente).
 <img  src="img/ColaFlecha.png">
 
-Una Pila tambien puede entenderse como una cadena de elementos, pero la Pila solo permite el acceso al elemento que esta en el tope, entonces solo se puede agregar arriba del tope(azul) o sacar el elemento que esta en el tope(rojo).
-Lo que esta tapado por amarillo es inaccesible.
+Una Pila también puede entenderse como una cadena de elementos, pero la Pila solo permite el acceso al elemento que está en el tope, entonces solo se puede agregar arriba del tope (azul) o sacar el elemento que está en el tope (rojo).
+Lo que está tapado por amarillo es inaccesible.
 <img  src="img/PilaExpli.png">
 
 ### Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
@@ -130,7 +130,7 @@ void *cola_desencolar(Cola *);
 
 bool cola_esta_vacía(Cola *);
 
-Tanto para Pila como para Cola las funciones utilizan el reusltado de una funcion de `Lista`, los casos de `destruir` necesariamente deben recorrer todos los nodos, esto lo hace una funcion de lista y en la funcion de pila y cola solo son llamadas, asi que aunque no tengan ningun loop, la funcion que llaman si lo tiene.
+Tanto para Pila como para Cola, las funciones utilizan el resultado de una función de `Lista`. Los casos de `destruir` necesariamente deben recorrer todos los nodos, esto lo hace una función de lista y en la función de pila y cola solo son llamadas, así que, aunque no tengan ningún loop, la función que llaman sí lo tiene.
 
 La `Pila` tiene como ventaja que todo es realizado en el tope, que es el primer nodo por ende siempre es O(1).
 
