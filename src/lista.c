@@ -138,7 +138,7 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 {
 	if (lista == NULL)
 		return false;
-	if (posicion >= lista->elementos_cant)
+	if (posicion > lista->elementos_cant)
 		return false;
 	if (elemento_encontrado == NULL)
 		return true;
@@ -231,7 +231,10 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 
 bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
 {
-	if (iterador->nodo_actual->siguiente_nodo != NULL)
+	if (iterador == NULL)
+		return false;
+	if (iterador->nodo_actual->siguiente_nodo != NULL &&
+	    iterador->nodo_actual != NULL)
 		return true;
 	else
 		return false;
