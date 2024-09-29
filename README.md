@@ -91,3 +91,49 @@ Insertar/obtener/eliminar al medio es O(n) siempre para vector dinamico, porque 
 Para las listas enlazadas la complejidad sigue siendo O(n) porque tienen que moverse por la lista, ya sea para Insertar/obtener/eliminar.
 
 ### Explica la complejidad de las operaciones implementadas en tu trabajo para la pila y la cola.
+
+### cada una de estas funciones es O(1) `PILA`
+
+size_t pila_cantidad(Pila *);
+
+void *pila_tope(Pila *);
+
+bool pila_apilar(Pila *, void *);
+
+void *pila_desapilar(Pila *);
+
+bool pila_esta_vacía(Pila *);
+
+### O(n) `PILA`
+
+void pila_destruir(Pila *);
+
+void pila_destruir_todo(Pila *, void (*f)(void *));
+
+
+### O(n) `COLA`
+
+void cola_destruir(Cola *);
+
+void cola_destruir_todo(Cola *, void (*f)(void *));
+
+bool cola_encolar(Cola *, void *);
+
+### cada una de estas funciones es O(1) `COLA`
+
+size_t cola_cantidad(Cola *);
+
+void *cola_frente(Cola *);
+
+
+void *cola_desencolar(Cola *);
+
+bool cola_esta_vacía(Cola *);
+
+Tanto para Pila como para Cola las funciones utilizan el reusltado de una funcion de `Lista`, los casos de `destruir` necesariamente deben recorrer todos los nodos, esto lo hace una funcion de lista y en la funcion de pila y cola solo son llamadas, asi que aunque no tengan ningun loop, la funcion que llaman si lo tiene.
+
+La `Pila` tiene como ventaja que todo es realizado en el tope, que es el primer nodo por ende siempre es O(1).
+
+La `Cola` es O(1) siempre que se use el frente pero cuando hay que `encolar` es O(n) ya que hay que llegar al final.
+
+Ambos Tda guardan la cantidad como dato asi que no hay que contar, por ende, O(1)
