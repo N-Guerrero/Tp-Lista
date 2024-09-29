@@ -182,6 +182,8 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
 {
 	if (lista == NULL)
 		return;
+	if (lista->primer_nodo == NULL)
+		return;
 	Nodo *siguiente = lista->primer_nodo;
 	Nodo *destruido = siguiente;
 	while (destruido != NULL) {

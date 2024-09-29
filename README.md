@@ -66,6 +66,12 @@ Finalmente, tanto `PILA` como `COLA` son como wrapers de una lista que limitan c
 Una lista es una cadena de elementos que pueden ser accedidos en cualquier orden, podes agarrar el primero, el ultimo o cualquiera del medio. 
 <img  src="img/imageLista.png">
 
+Una cola sigue siendo una cadena de elementos pero solo se puede agregar en un extremo(Final) y solo se puede eliminar desde el otro extremo(Frente).
+<img  src="img/ColaFlecha.png">
+
+Una Pila tambien puede entenderse como una cadena de elementos, pero la Pila solo permite el acceso al elemento que esta en el tope, entonces solo se puede agregar arriba del tope(azul) o sacar el elemento que esta en el tope(rojo).
+Lo que esta tapado por amarillo es inaccesible.
+<img  src="img/PilaExpli.png">
 ### Explica y analiza las diferencias de complejidad entre las implementaciones de lista simplemente enlazada, doblemente enlazada y vector dinámico para las operaciones:
     Insertar/obtener/eliminar al inicio
     Insertar/obtener/eliminar al final
