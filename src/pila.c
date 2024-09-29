@@ -31,21 +31,19 @@ size_t pila_cantidad(Pila *pila)
 void *pila_tope(Pila *pila)
 {
 	void *encontrado = NULL;
-	if (lista_obtener_elemento(pila->lista,
-				   lista_cantidad_elementos(pila->lista),
-				   &encontrado))
+	if (lista_obtener_elemento(pila->lista, 0, &encontrado))
 		return encontrado;
 	return NULL;
 }
 bool pila_apilar(Pila *pila, void *cosa)
 {
-	return lista_agregar_al_final(pila->lista, cosa);
+	return lista_agregar_elemento(pila->lista, 0, cosa);
 }
 
 void *pila_desapilar(Pila *pila)
 {
 	void *quitado = NULL;
-	if (lista_quitar_elemento(pila->lista, pila_cantidad(pila), &quitado))
+	if (lista_quitar_elemento(pila->lista, 0, &quitado))
 		return quitado;
 	return NULL;
 }

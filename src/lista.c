@@ -14,7 +14,6 @@ typedef struct nodo {
 } Nodo;
 struct lista_iterador {
 	Nodo *nodo_actual;
-	bool hay_siguiente;
 };
 
 Lista *lista_crear()
@@ -138,7 +137,7 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 {
 	if (lista == NULL)
 		return false;
-	if (posicion > lista->elementos_cant)
+	if (posicion >= lista->elementos_cant)
 		return false;
 	if (elemento_encontrado == NULL)
 		return true;
@@ -221,10 +220,6 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 	if (iterador == NULL)
 		return NULL;
 	iterador->nodo_actual = lista->primer_nodo;
-	if (iterador->nodo_actual->siguiente_nodo != NULL)
-		iterador->hay_siguiente = true;
-	else
-		iterador->hay_siguiente = false;
 
 	return iterador;
 }
@@ -233,11 +228,11 @@ bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
 {
 	if (iterador == NULL)
 		return false;
-	if (iterador->nodo_actual->siguiente_nodo != NULL &&
-	    iterador->nodo_actual != NULL)
-		return true;
-	else
+	if (iterador->nodo_actual->siguiente_nodo == NULL ||
+	    iterador->nodo_actual == NULL)
 		return false;
+	else
+		return true;
 }
 
 void lista_iterador_avanzar(Lista_iterador *iterador)
