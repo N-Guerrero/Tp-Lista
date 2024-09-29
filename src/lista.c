@@ -3,21 +3,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct lista {
+struct lista
+{
   size_t elementos_cant;
   struct nodo *primer_nodo;
 };
 
-typedef struct nodo {
+typedef struct nodo
+{
   void *elemento;
   struct nodo *siguiente_nodo;
 } Nodo;
-struct lista_iterador {
+struct lista_iterador
+{
   Nodo *nodo_actual;
   bool hay_siguiente;
 };
 
-Lista *lista_crear() {
+Lista *lista_crear()
+{
   Lista *lista = malloc(sizeof(Lista));
   if (lista == NULL)
     return NULL;
@@ -27,10 +31,12 @@ Lista *lista_crear() {
   return lista;
 }
 
-void lista_destruir(Lista *lista) {
+void lista_destruir(Lista *lista)
+{
   Nodo *siguiente = lista->primer_nodo;
   Nodo *destruido = siguiente;
-  while (destruido != NULL) {
+  while (destruido != NULL)
+  {
     siguiente = siguiente->siguiente_nodo;
     free(destruido);
     destruido = siguiente;
@@ -41,20 +47,23 @@ void lista_destruir(Lista *lista) {
   printf("%p\n", (void *)lista);
 }
 
-size_t lista_cantidad_elementos(Lista *lista) {
+size_t lista_cantidad_elementos(Lista *lista)
+{
   if (lista->primer_nodo == NULL)
     return 0;
   else
     return lista->elementos_cant;
 }
-bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa) {
+bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa)
+{
   if (posicion > lista->elementos_cant)
     return false;
   if (lista->primer_nodo == NULL)
     return false;
   Nodo *aux1 = lista->primer_nodo;
 
-  if (posicion == 1) {
+  if (posicion == 1)
+  {
     Nodo *ptr_agregado = malloc(sizeof(Nodo));
     if (ptr_agregado == NULL)
       return false;
@@ -76,19 +85,22 @@ bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa) {
   return true;
 }
 
-bool lista_agregar_al_final(Lista *lista, void *cosa) {
+bool lista_agregar_al_final(Lista *lista, void *cosa)
+{
   Nodo *aux1 = lista->primer_nodo;
   Nodo *nuevo = malloc(sizeof(Nodo));
   if (nuevo == NULL)
     return false;
   nuevo->elemento = cosa;
   nuevo->siguiente_nodo = NULL;
-  if (aux1 == NULL) { // primer caso, si no hay nodo al inicio
+  if (aux1 == NULL)
+  { // primer caso, si no hay nodo al inicio
     lista->primer_nodo = nuevo;
     lista->elementos_cant++;
     return true;
   }
-  while (aux1->siguiente_nodo != NULL) {
+  while (aux1->siguiente_nodo != NULL)
+  {
     aux1 = aux1->siguiente_nodo;
   }
   aux1->siguiente_nodo = nuevo;
@@ -97,11 +109,13 @@ bool lista_agregar_al_final(Lista *lista, void *cosa) {
 }
 
 bool lista_quitar_elemento(Lista *lista, size_t posicion,
-                           void **elemento_quitado) {
+                           void **elemento_quitado)
+{
   if (lista->primer_nodo == NULL)
     return false;
   Nodo *anterior = lista->primer_nodo;
-  if (posicion == 1) {
+  if (posicion == 1)
+  {
     lista->primer_nodo = anterior->siguiente_nodo;
     *elemento_quitado = anterior->elemento;
     free(anterior);
@@ -120,12 +134,14 @@ bool lista_quitar_elemento(Lista *lista, size_t posicion,
 }
 
 bool lista_obtener_elemento(Lista *lista, size_t posicion,
-                            void **elemento_encontrado) {
+                            void **elemento_encontrado)
+{
 
   if (posicion > lista->elementos_cant)
     return false;
   Nodo *aux = (Nodo *)lista->primer_nodo;
-  for (size_t i = 1; i < posicion; i++) {
+  for (size_t i = 1; i < posicion; i++)
+  {
     aux = aux->siguiente_nodo;
   }
   if (aux == NULL)
@@ -137,13 +153,16 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
 }
 
 void *lista_buscar_elemento(Lista *lista, void *buscado,
-                            int (*comparador)(void *, void *)) {
-  if (comparador == NULL) {
+                            int (*comparador)(void *, void *))
+{
+  if (comparador == NULL)
+  {
     printf("es null la funcion\n");
     return NULL;
   }
   Nodo *aux = lista->primer_nodo;
-  while (aux != NULL) {
+  while (aux != NULL)
+  {
     if (comparador(buscado, aux->elemento) == 0)
       return aux->elemento;
     aux = aux->siguiente_nodo;
@@ -151,11 +170,13 @@ void *lista_buscar_elemento(Lista *lista, void *buscado,
   printf("es null busq\n");
   return NULL;
 }
-void lista_destruir_todo(Lista *lista, void (*destructor)(void *)) {
+void lista_destruir_todo(Lista *lista, void (*destructor)(void *))
+{
 
   Nodo *siguiente = lista->primer_nodo;
   Nodo *destruido = siguiente;
-  while (destruido != NULL) {
+  while (destruido != NULL)
+  {
     siguiente = siguiente->siguiente_nodo;
     destructor(destruido->elemento);
     free(destruido);
@@ -167,10 +188,12 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *)) {
 }
 
 size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
-                              void *ctx) {
+                              void *ctx)
+{
   size_t iteraciones = 0;
   Nodo *aux = lista->primer_nodo;
-  while (aux != NULL) {
+  while (aux != NULL)
+  {
     if (aux->elemento == NULL)
       continue;
     bool funcion = f(aux->elemento, ctx);
@@ -182,7 +205,8 @@ size_t lista_iterar_elementos(Lista *lista, bool (*f)(void *, void *),
   return iteraciones;
 }
 
-Lista_iterador *lista_iterador_crear(Lista *lista) {
+Lista_iterador *lista_iterador_crear(Lista *lista)
+{
 
   Lista_iterador *iterador = malloc(sizeof(Lista_iterador));
   if (iterador == NULL)
@@ -194,24 +218,28 @@ Lista_iterador *lista_iterador_crear(Lista *lista) {
   return iterador;
 }
 
-bool lista_iterador_hay_siguiente(Lista_iterador *iterador) {
+bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
+{
   return iterador->hay_siguiente;
 }
 
-void lista_iterador_avanzar(Lista_iterador *iterador) {
+void lista_iterador_avanzar(Lista_iterador *iterador)
+{
 
   iterador->nodo_actual = iterador->nodo_actual->siguiente_nodo;
   if (iterador->nodo_actual->siguiente_nodo != NULL)
     iterador->hay_siguiente = true;
 }
 
-void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador) {
+void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador)
+{
   if (iterador->nodo_actual->elemento != NULL)
     return iterador->nodo_actual->elemento;
   return NULL;
 }
 
-void lista_iterador_destruir(Lista_iterador *iterador) {
+void lista_iterador_destruir(Lista_iterador *iterador)
+{
   free(iterador);
   iterador = NULL;
 }

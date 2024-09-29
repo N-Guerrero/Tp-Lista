@@ -3,18 +3,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct archivo_csv {
+struct archivo_csv
+{
   FILE *archivo_nombre;
   char separador;
 };
 
 struct archivo_csv *abrir_archivo_csv(const char *nombre_archivo,
-                                      char separador) {
+                                      char separador)
+{
   struct archivo_csv *pokedex_file = malloc(sizeof(struct archivo_csv));
 
   pokedex_file->archivo_nombre = fopen(nombre_archivo, "r");
 
-  if (pokedex_file->archivo_nombre == NULL) {
+  if (pokedex_file->archivo_nombre == NULL)
+  {
 
     free(pokedex_file);
     return NULL;
@@ -24,14 +27,18 @@ struct archivo_csv *abrir_archivo_csv(const char *nombre_archivo,
 }
 
 size_t leer_linea_csv(struct archivo_csv *archivo, size_t columnas,
-                      bool (*funciones[])(const char *, void *), void *ctx[]) {
-  for (size_t i = 0; i < columnas; i++) {
-    if (funciones[i] == NULL) {
+                      bool (*funciones[])(const char *, void *), void *ctx[])
+{
+  for (size_t i = 0; i < columnas; i++)
+  {
+    if (funciones[i] == NULL)
+    {
       printf("error en cantidad de funciones\n");
       columnas = i;
       printf("columnas %zu\n", columnas);
     }
-    if (ctx[i] == NULL) {
+    if (ctx[i] == NULL)
+    {
       printf("error en cantidad de punteros\n");
       // columnas = i;
     }
@@ -41,12 +48,15 @@ size_t leer_linea_csv(struct archivo_csv *archivo, size_t columnas,
 
   char linea[300];
   size_t col_read = 0;
-  if (fgets(linea, 300, archivo->archivo_nombre) != NULL) {
+  if (fgets(linea, 300, archivo->archivo_nombre) != NULL)
+  {
     char *inicio = linea;
 
-    while (col_read < columnas) {
+    while (col_read < columnas)
+    {
       char *pos_delimiter = strchr(inicio, archivo->separador);
-      if (pos_delimiter != NULL) {
+      if (pos_delimiter != NULL)
+      {
         size_t longiud_palabra = (size_t)pos_delimiter - (size_t)inicio;
 
         char palabra[longiud_palabra + 1];
@@ -54,7 +64,8 @@ size_t leer_linea_csv(struct archivo_csv *archivo, size_t columnas,
         palabra[longiud_palabra] = '\0';
         if (funciones == NULL)
           return col_read;
-        if (ctx[col_read] != NULL) {
+        if (ctx[col_read] != NULL)
+        {
           bool check = funciones[col_read](palabra, ctx[col_read]);
           if (check == false)
             return col_read;
@@ -63,11 +74,13 @@ size_t leer_linea_csv(struct archivo_csv *archivo, size_t columnas,
 
         // printf("read %zu\n",col_read);
         col_read++;
-
-      } else if (col_read == columnas - 1) {
+      }
+      else if (col_read == columnas - 1)
+      {
         if (funciones == NULL)
           return col_read;
-        if (ctx[col_read] != NULL) {
+        if (ctx[col_read] != NULL)
+        {
           bool check = funciones[col_read](inicio, ctx[col_read]);
           if (check == false)
             return col_read;
@@ -81,7 +94,8 @@ size_t leer_linea_csv(struct archivo_csv *archivo, size_t columnas,
   return col_read;
 }
 
-void cerrar_archivo_csv(struct archivo_csv *archivo) {
+void cerrar_archivo_csv(struct archivo_csv *archivo)
+{
   if (fclose(archivo->archivo_nombre) == (-1))
     perror("error al cerrar archivo");
 
