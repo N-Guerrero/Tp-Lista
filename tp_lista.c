@@ -31,7 +31,6 @@ bool crear_string_nuevo(const char *str, void *ctx) {
 int comparar_nombre_pokemon(void *_p1, void *_p2) {
   struct pokemon *p1 = _p1;
   struct pokemon *p2 = _p2;
-
   return strcmp(p1->nombre, p2->nombre);
 }
 void liberar_pokemon(void *pokemon) {
@@ -42,7 +41,7 @@ void liberar_pokemon(void *pokemon) {
     liberado = NULL;
   }
 }
-agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo *archivo) {
+void agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo_csv *archivo) {
   bool (*funciones[5])(const char *, void *) = {
       crear_string_nuevo, leer_caracter, leer_int, leer_int, leer_int};
 
@@ -54,12 +53,15 @@ agregar_pokemon_desde_archivo(Lista *pokedex, struct archivo *archivo) {
   void *punteros[5] = {&nombre, &tipo, &fuerza, &destreza, &resistencia};
 
   while (leer_linea_csv(archivo, 5, funciones, punteros) == 5) {
-    struct pokemon nuevo_pokemon = {.nombre = nombre,
-                                    .tipo = tipo,
-                                    .fuerza = fuerza,
-                                    .destreza = destreza,
-                                    .resistencia = resistencia};
-    lista_agregar_al_final(pokedex, &nuevo_pokemon);
+    
+    struct pokemon* nuevo_pokemon=malloc(sizeof(struct pokemon));
+    nuevo_pokemon->nombre=nombre;
+    nuevo_pokemon->fuerza=fuerza;
+    nuevo_pokemon->destreza=destreza;
+    nuevo_pokemon->tipo=tipo;
+    nuevo_pokemon->resistencia=resistencia;
+    
+    lista_agregar_al_final(pokedex, nuevo_pokemon);
 
     free(nombre);
   }
@@ -83,23 +85,15 @@ int main(int argc, char *argv[]) {
   // 2. Listar todos los pokemones de la pokedex
   //
   //
-  struct archivo *archivo = abrir_archivo_csv(argv[1], argv[2]);
+  
+  char* nombre_file="pokedex.csv";
+  char separador=';';
+  struct archivo_csv *archivo = abrir_archivo_csv(argv[1],argv[2][0]);
+  
   Lista *pokedex = lista_crear();
-  if (archivo == NULL) {
-    struct pokemon p1 = {.destreza = 100,
-                         .fuerza = 5,
-                         .resistencia = 3,
-                         .tipo = 'E',
-                         .nombre = "luxray"};
-    struct pokemon p2 = {.destreza = 22,
-                         .fuerza = 84,
-                         .resistencia = 80,
-                         .tipo = 'A',
-                         .nombre = "Blastoise"};
-    lista_agregar_al_final(pokedex, &p1);
-    lista_agregar_al_final(pokedex, &p2);
-  }
+  
   if (archivo != NULL)
+  
     agregar_pokemon_desde_archivo(pokedex, archivo);
 
   // menu
@@ -116,24 +110,31 @@ int main(int argc, char *argv[]) {
       char pokemon_buscado[100];
       scanf("%99s", pokemon_buscado);
       struct pokemon buscado = {.nombre = pokemon_buscado};
+      
       struct pokemon *encontrado =
-          lista_buscar_elemento(pokedex, &buscado, comparar_nombre_pokemon);
+          lista_buscar_elemento(pokedex, &buscado,comparar_nombre_pokemon);
+      
       if (encontrado != NULL) {
         printf("Se encontro al pokemon buscado!!\n");
         mostrar_pokemon(encontrado);
-      } else
+      } else{
         printf("pokemon no encontrado\n");
+      }
 
       opcion = 0;
     }
     if (opcion == 2) {
+      
       for (size_t i = 1;                           // O(1)
            i <= lista_cantidad_elementos(pokedex); // O(1)
            i++) {                                  // O(1)
-        struct pokemon *p;
-        lista_obtener_elemento(pokedex, i, (void **)&p); // O(n)
+        struct pokemon *p=NULL;
+        
+        if(lista_obtener_elemento(pokedex, i, (void **)&p)){ // O(n)
         mostrar_pokemon(p);
+         
         printf("-----------------------\n");
+        }
       }
       opcion = 0;
     }

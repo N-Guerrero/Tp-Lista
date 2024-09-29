@@ -12,8 +12,11 @@ struct archivo_csv *abrir_archivo_csv(const char *nombre_archivo,
 				      char separador)
 {
 	struct archivo_csv *pokedex_file = malloc(sizeof(struct archivo_csv));
+	
 	pokedex_file->archivo_nombre = fopen(nombre_archivo, "r");
+	
 	if (pokedex_file->archivo_nombre == NULL) {
+		
 		free(pokedex_file);
 		return NULL;
 	}

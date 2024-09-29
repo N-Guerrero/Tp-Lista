@@ -77,7 +77,7 @@ bool lista_agregar_elemento(Lista *lista, size_t posicion, void *cosa) {
 }
 
 bool lista_agregar_al_final(Lista *lista, void *cosa) {
-  Nodo *aux1 = (Nodo *)lista->primer_nodo;
+  Nodo *aux1 = lista->primer_nodo;
   Nodo *nuevo = malloc(sizeof(Nodo));
   if (nuevo == NULL)
     return false;
@@ -132,20 +132,22 @@ bool lista_obtener_elemento(Lista *lista, size_t posicion,
     return false;
 
   *elemento_encontrado = aux->elemento;
-
+  
   return true;
 }
 
 void *lista_buscar_elemento(Lista *lista, void *buscado,
                             int (*comparador)(void *, void *)) {
-  if (comparador == NULL)
-    return NULL;
+  if (comparador == NULL){
+    printf("es null la funcion\n");
+    return NULL;}
   Nodo *aux = lista->primer_nodo;
   while (aux != NULL) {
     if (comparador(buscado, aux->elemento) == 0)
       return aux->elemento;
     aux = aux->siguiente_nodo;
   }
+  printf("es null busq\n");
   return NULL;
 }
 void lista_destruir_todo(Lista *lista, void (*destructor)(void *)) {
@@ -158,8 +160,7 @@ void lista_destruir_todo(Lista *lista, void (*destructor)(void *)) {
     free(destruido);
     destruido = siguiente;
   }
-  if (lista->primer_nodo != NULL)
-    printf("error al destrir lista");
+  
   free(lista);
   lista = NULL;
 }

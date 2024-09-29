@@ -8,6 +8,12 @@ struct pokemon {
   int destreza;
   int resistencia;
 };
+int comparar_nombre_pokemon(void *_p1, void *_p2) {
+  struct pokemon *p1 = _p1;
+  struct pokemon *p2 = _p2;
+  printf("buscado %s comparando %s\n",p1->nombre,p2->nombre);
+  return strcmp(p1->nombre, p2->nombre);
+}
 
 void prueba_simple() {
   int i = 14;
@@ -57,6 +63,16 @@ void probar_eliminar(Lista *lista) {
   bool se_quito = lista_quitar_elemento(lista, 2, (void **)&p);
   pa2m_afirmar(se_quito, "se quito a %s\n", p->nombre);
 }
+void probar_buscar(Lista *lista){
+  struct pokemon buscado={.nombre="luxray"};
+  // struct pokemon* buscado=malloc(sizeof(struct pokemon));
+  // buscado->nombre="luxray";
+  struct pokemon* encontrado=lista_buscar_elemento(lista,&buscado,comparar_nombre_pokemon);
+  printf("encontrado p %p\n",(void*)encontrado);
+  pa2m_afirmar(strcmp(encontrado->nombre,"luxray")==0,"pokemon encontrado");
+  //free(buscado);
+
+}
 int main() {
   pa2m_nuevo_grupo("============== ??? ===============");
   // prueba_simple();
@@ -105,6 +121,7 @@ int main() {
     lista_obtener_elemento(lista, i, (void **)&p);
     printf("%s\n", p->nombre);
   }
+  probar_buscar(lista);
 
   probar_destruir_lista(lista);
 
