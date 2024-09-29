@@ -226,7 +226,6 @@ Lista_iterador *lista_iterador_crear(Lista *lista)
 
 bool lista_iterador_hay_siguiente(Lista_iterador *iterador)
 {
-	
 	if (iterador == NULL)
 		return false;
 	if (iterador->nodo_actual == NULL) {
@@ -247,8 +246,8 @@ void *lista_iterador_obtener_elemento_actual(Lista_iterador *iterador)
 {
 	if (iterador == NULL)
 		return NULL;
-  if(iterador->nodo_actual==NULL)
-    return NULL;
+	if (iterador->nodo_actual == NULL)
+		return NULL;
 	if (iterador->nodo_actual->elemento != NULL)
 		return iterador->nodo_actual->elemento;
 	return NULL;

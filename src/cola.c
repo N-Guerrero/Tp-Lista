@@ -34,22 +34,20 @@ size_t cola_cantidad(Cola *cola)
 void *cola_frente(Cola *cola)
 {
 	void *encontrado = NULL;
-	if (lista_obtener_elemento(cola->lista, 1, &encontrado))
+	if (lista_obtener_elemento(cola->lista, 0, &encontrado))
 		return encontrado;
 	return NULL;
 }
 bool cola_encolar(Cola *cola, void *cosa)
 {
-	if (lista_agregar_elemento(cola->lista, 1, cosa))
+	if (lista_agregar_al_final(cola->lista, cosa))
 		return true;
 	return false;
 }
 void *cola_desencolar(Cola *cola)
 {
 	void *quitado = NULL;
-	if (lista_quitar_elemento(cola->lista,
-				  lista_cantidad_elementos(cola->lista),
-				  &quitado))
+	if (lista_quitar_elemento(cola->lista, 0, &quitado))
 		return quitado;
 	return NULL;
 }
